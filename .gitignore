@@ -2,5 +2,6 @@
 *FChT.sv
 *.png
 .spyderproject
+*.pyc
 stereo2mono.sh
 audio_format.bat
