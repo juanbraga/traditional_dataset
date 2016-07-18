@@ -18,7 +18,7 @@ def load_list():
         
     return ltrdataset
     
-def load_gt(gt_file, t):
+def load_gt(gt_file, t, fs = 44100, frame=1024, hop=1024):
     
     cr = csv.reader(open(gt_file,"rb"))
     onset=[]
@@ -34,6 +34,7 @@ def load_gt(gt_file, t):
             aux_vad_gt = np.r_[aux_vad_gt,0]
         else:
             aux_vad_gt = np.r_[aux_vad_gt,1]
+    
     
     j=0
     vad_gt = np.empty([len(t),], 'int8')
@@ -64,6 +65,8 @@ def load_gt(gt_file, t):
         i=i+1
         
         j=0
+
+    t = np.arange(len(t)/1024 - 1) * float(hop)/fs     
     
     gt = np.empty([len(t),],'float64')
     for i in range(1,len(onset)):
@@ -74,7 +77,7 @@ def load_gt(gt_file, t):
     
     gt = lr.hz_to_midi(gt)
             
-    return vad_gt, gt
+    return vad_gt, gt, onset
         
     
 def load_audio(audio_file):
