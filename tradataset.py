@@ -8,6 +8,78 @@ import librosa as lr
 import numpy as np
 import scipy.io.wavfile as wav
 import csv
+from xml.dom.minidom import parse, parseString
+
+def get_step(note):
+    stepNode = note.getElementsByTagName("step")[0]
+    #get the text from the Text Node within the <step>,
+    #and convert it from unicode to ascii
+    return str(stepNode.childNodes[0].nodeValue)
+    
+def get_duration(note):
+    noteDuration = note.getElementsByTagName("duration")[0]
+    #get the text from the Text Node within the <duration>,
+    #and convert it from unicode to ascii
+    return str(noteDuration.childNodes[0].nodeValue)
+    
+def get_octave(note):
+    noteOctave = note.getElementsByTagName("octave")[0]
+    #get the text from the Text Node within the <octave>,
+    #and convert it from unicode to ascii
+    return str(noteOctave.childNodes[0].nodeValue)
+
+def get_alter(note):
+    alters = note.getElementsByTagName("alter")
+    if len(alters) == 0:
+        return ' '
+    return alters[0]
+
+def is_rest(note):
+    return len(note.getElementsByTagName("rest")) > 0
+
+def is_accidental(note):
+    return get_alter(note) != None
+    
+def load_score(score_file):
+
+    dom = parse(score_file)
+
+    xml_notes = dom.getElementsByTagName("note")
+    
+    notes=[]
+    durations=[]
+    for note in xml_notes:
+        notes.append(get_step(note) + get_octave(note))
+        durations.append(get_duration(note))
+        
+    durations=np.array(durations,dtype='int16')
+    
+    cr = csv.reader(open("../traditional_dataset/note_convertion.csv","rb"))
+          
+    notation=[]
+    frequency=[]
+    
+    for row in cr:
+    
+        notation.append(row[0]) 
+        frequency.append(row[1])
+    
+    frequency = np.array(frequency, 'float64')
+    
+    i=0
+    melo = np.empty([0,])
+    for note in notes:
+        if note=='0':
+            melo = np.r_[melo,0]
+        else:
+            for k in range(0,durations[i]):            
+                melo = np.r_[melo,frequency[notation.index(note)]]
+        i=i+1
+    
+    
+    score = lr.hz_to_midi(melo)
+    
+    return score
 
 def load_list():
 
@@ -89,4 +161,6 @@ def load_audio(audio_file):
     return audio, t, fs  
     
     
-tdlist = load_list()
+if __name__=="__main__":
+    
+    score=load_score("just_gettin'_it.xml")
