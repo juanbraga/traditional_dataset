@@ -49,8 +49,12 @@ def load_score(score_file):
     notes=[]
     durations=[]
     for note in xml_notes:
-        notes.append(get_step(note) + get_octave(note))
-        durations.append(get_duration(note))
+        if is_rest(note):
+            notes.append('0')
+            durations.append(get_duration(note))
+        else:
+            notes.append(get_step(note) + get_octave(note))
+            durations.append(get_duration(note))
         
     durations=np.array(durations,dtype='int16')
     
@@ -70,7 +74,8 @@ def load_score(score_file):
     melo = np.empty([0,])
     for note in notes:
         if note=='0':
-            melo = np.r_[melo,0]
+            for k in range(0,durations[i]):            
+                melo = np.r_[melo,0]
         else:
             for k in range(0,durations[i]):            
                 melo = np.r_[melo,frequency[notation.index(note)]]
@@ -78,7 +83,7 @@ def load_score(score_file):
     
     
     score = lr.hz_to_midi(melo)
-    
+    np.place(score,score==-np.inf,0)
     return score
 
 def load_list():
@@ -148,7 +153,7 @@ def load_gt(gt_file, t, fs = 44100, frame=1024, hop=1024):
     
     
     gt = lr.hz_to_midi(gt)
-            
+    np.place(gt,gt==-np.inf,0)
     return vad_gt, gt, onset
         
     
@@ -163,4 +168,4 @@ def load_audio(audio_file):
     
 if __name__=="__main__":
     
-    score=load_score("just_gettin'_it.xml")
+    score=load_score(score_file)

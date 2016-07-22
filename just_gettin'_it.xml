@@ -4,7 +4,7 @@
   <identification>
     <encoding>
       <software>MuseScore 1.3</software>
-      <encoding-date>2016-07-20</encoding-date>
+      <encoding-date>2016-07-22</encoding-date>
       </encoding>
     </identification>
   <defaults>
@@ -57,7 +57,7 @@
       </score-part>
     </part-list>
   <part id="P1">
-    <measure number="1" width="278.48">
+    <measure number="1" width="279.21">
       <print>
         <system-layout>
           <system-margins>
@@ -92,7 +92,7 @@
         <type>quarter</type>
         <stem>down</stem>
         </note>
-      <note default-x="159.06" default-y="-15.00">
+      <note default-x="159.30" default-y="-15.00">
         <pitch>
           <step>C</step>
           <alter>1</alter>
@@ -103,7 +103,7 @@
         <type>quarter</type>
         <stem>down</stem>
         </note>
-      <note default-x="217.97" default-y="-10.00">
+      <note default-x="218.46" default-y="-10.00">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -114,7 +114,7 @@
         <stem>down</stem>
         </note>
       </measure>
-    <measure number="2" width="233.16">
+    <measure number="2" width="230.23">
       <note default-x="12.00" default-y="-5.00">
         <pitch>
           <step>E</step>
@@ -126,7 +126,7 @@
         <stem>down</stem>
         <beam number="1">begin</beam>
         </note>
-      <note default-x="54.07" default-y="-15.00">
+      <note default-x="53.50" default-y="-15.00">
         <pitch>
           <step>C</step>
           <alter>1</alter>
@@ -138,17 +138,13 @@
         <stem>down</stem>
         <beam number="1">end</beam>
         </note>
-      <note default-x="96.13" default-y="-10.00">
-        <pitch>
-          <step>D</step>
-          <octave>5</octave>
-          </pitch>
+      <note>
+        <rest/>
         <duration>4</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>down</stem>
         </note>
-      <note default-x="153.97" default-y="-25.00">
+      <note default-x="152.08" default-y="-25.00">
         <pitch>
           <step>A</step>
           <octave>4</octave>
@@ -160,7 +156,7 @@
         <stem>up</stem>
         <beam number="1">begin</beam>
         </note>
-      <note default-x="205.26" default-y="-15.00">
+      <note default-x="202.69" default-y="-15.00">
         <pitch>
           <step>C</step>
           <alter>1</alter>
@@ -174,7 +170,7 @@
         <beam number="2">backward hook</beam>
         </note>
       </measure>
-    <measure number="3" width="165.25">
+    <measure number="3" width="165.98">
       <note default-x="12.00" default-y="-10.00">
         <pitch>
           <step>D</step>
@@ -191,7 +187,7 @@
           </notations>
         </note>
       </measure>
-    <measure number="4" width="165.25">
+    <measure number="4" width="165.98">
       <note default-x="12.00" default-y="-10.00">
         <pitch>
           <step>D</step>
@@ -210,7 +206,7 @@
           </notations>
         </note>
       </measure>
-    <measure number="5" width="171.25">
+    <measure number="5" width="171.98">
       <note default-x="12.00" default-y="-10.00">
         <pitch>
           <step>D</step>

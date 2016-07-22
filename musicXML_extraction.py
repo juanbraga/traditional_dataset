@@ -37,7 +37,7 @@ def is_rest(note):
 def is_accidental(note):
     return get_alter(note) != None
 
-dom = parse("just_gettin'_it.xml")
+dom = parse('../traditional_dataset/allemande/fragments/allemande_fourth_fragment_larrieu.xml')
 
 notes = dom.getElementsByTagName("note")
 duration = dom.getElementsByTagName("duration")
@@ -76,8 +76,9 @@ if len(notes) == 0:
     print "(None found)"
 else:
     for note in notes:
-        print get_step(note) + get_octave(note)
-        print get_duration(note)
+        print 'yeah'
+#        print get_step(note) + get_octave(note)
+#        print get_duration(note)
         
         
     
