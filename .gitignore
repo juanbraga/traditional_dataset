@@ -5,5 +5,4 @@
 *.pyc
 stereo2mono.sh
 audio_format.bat
-*.mscz
 *.mid
