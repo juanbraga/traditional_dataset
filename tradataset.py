@@ -31,14 +31,18 @@ def get_octave(note):
 def get_alter(note):
     alters = note.getElementsByTagName("alter")
     if len(alters) == 0:
-        return ' '
-    return alters[0]
+        return None
+    alters = note.getElementsByTagName("alter")[0]
+    return str(alters.childNodes[0].nodeValue)
 
 def is_rest(note):
     return len(note.getElementsByTagName("rest")) > 0
 
 def is_accidental(note):
     return get_alter(note) != None
+    
+def is_fermata(note):
+    return len(note.getElementsByTagName("fermata")) > 0
     
 def load_score(score_file):
 
@@ -49,13 +53,25 @@ def load_score(score_file):
     notes=[]
     durations=[]
     for note in xml_notes:
+        if is_fermata(note):
+            print 'fermata'
+        durations.append(get_duration(note))
         if is_rest(note):
             notes.append('0')
-            durations.append(get_duration(note))
-        else:
-            notes.append(get_step(note) + get_octave(note))
-            durations.append(get_duration(note))
-        
+        else: 
+            if is_accidental(note):
+                alter_aux = get_alter(note)
+                if alter_aux == '1':
+                    notes.append(get_step(note) + '#' + get_octave(note))
+                if alter_aux == '2':
+                    notes.append(get_step(note) + '##' + get_octave(note))
+                if alter_aux == '-1':
+                    notes.append(get_step(note) + 'b' + get_octave(note))
+                if alter_aux == '-2':
+                    notes.append(get_step(note) + 'bb' + get_octave(note))
+            else:
+                notes.append(get_step(note) + get_octave(note))
+       
     durations=np.array(durations,dtype='int16')
     
     cr = csv.reader(open("../traditional_dataset/note_convertion.csv","rb"))
@@ -84,7 +100,10 @@ def load_score(score_file):
     
     score = lr.hz_to_midi(melo)
     np.place(score,score==-np.inf,0)
-    return score
+    return score, notes
+    
+def modify_score():
+    pass
 
 def load_list():
 
@@ -164,8 +183,31 @@ def load_audio(audio_file):
     t = np.arange(len(audio)) * float(1)/fs
     
     return audio, t, fs  
-    
+
+
+def replaceText(node, newText):
+    if node.firstChild.nodeType != node.TEXT_NODE:
+        raise Exception("node does not contain text")
+
+    node.firstChild.replaceWholeText(newText)    
     
 if __name__=="__main__":
+
+    ltrdataset = load_list()    
+
+    fragment = ltrdataset[5]    
+    score_file = fragment + '.xml'    
     
-    score=load_score(score_file)
+    score, notes = load_score(score_file)
+
+#    dom = parse("just_gettin'_it.xml")
+#
+#    xml_notes = dom.getElementsByTagName("note")
+#    
+#    for note in xml_notes:
+#        node = note.getElementsByTagName("duration")[0]
+#        replaceText(node, '10')
+#    
+#    import codecs
+#    with codecs.open('edited.xml','w', encoding="utf-8") as f:
+#        f.write(dom.toxml(),)
