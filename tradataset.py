@@ -131,7 +131,6 @@ def load_gt(gt_file, t, fs = 44100, frame=1024, hop=1024):
         else:
             aux_vad_gt = np.r_[aux_vad_gt,1]
     
-    
     j=0
     vad_gt = np.empty([len(t),], 'int8')
     for i in range(1,len(onset)):
@@ -160,20 +159,20 @@ def load_gt(gt_file, t, fs = 44100, frame=1024, hop=1024):
             melo = np.r_[melo,frequency[notation.index(note)]]
         i=i+1
         
-        j=0
-
-    t = np.arange(len(t)/1024 - 1) * float(hop)/fs     
+    j=0
+    t_aux = np.arange(len(t)/1024 - 1) * float(hop)/fs     
     
-    gt = np.empty([len(t),],'float64')
+    gt_aux = np.empty([len(t_aux),],'float64')
     for i in range(1,len(onset)):
-        while (j<len(t) and (t[j])>=onset[i-1] and (t[j])<=onset[i]):
-            gt[j]=melo[i-1]
+        while (j<len(t_aux) and (t_aux[j])>=onset[i-1] and (t_aux[j])<=onset[i]):
+            gt_aux[j]=melo[i-1]
             j=j+1
     
     
-    gt = lr.hz_to_midi(gt)
-    np.place(gt,gt==-np.inf,0)
-    return vad_gt, gt, onset
+    #gt_aux = lr.hz_to_midi(gt_aux)
+    #np.place(gt_aux,gt_aux==-np.inf,0)
+    
+    return vad_gt, gt_aux, onset, melo
         
     
 def load_audio(audio_file):
@@ -195,10 +194,16 @@ if __name__=="__main__":
 
     ltrdataset = load_list()    
 
-    fragment = ltrdataset[5]    
-    score_file = fragment + '.xml'    
+    fragment = ltrdataset[11]    
+
+    audio_file = fragment + '_mono.wav'
+    gt_file = fragment + '.csv'
+#    score_file = fragment + '.xml'
+
+    audio, t, fs = load_audio(audio_file)
+    vad_gt, gt, onset_gt, melodiii = load_gt(gt_file, t)       
     
-    score, notes = load_score(score_file)
+#    score, notes = load_score(score_file)
 
 #    dom = parse("just_gettin'_it.xml")
 #
