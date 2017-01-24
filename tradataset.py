@@ -44,6 +44,9 @@ def is_accidental(note):
 def is_fermata(note):
     return len(note.getElementsByTagName("fermata")) > 0
     
+def is_grace(note):
+    return len(note.getElementsByTagName("grace")) > 0
+    
 def load_score(score_file):
 
     dom = parse(score_file)
@@ -52,10 +55,16 @@ def load_score(score_file):
     
     notes=[]
     durations=[]
+    contador=0
     for note in xml_notes:
+        contador = contador + 1
         if is_fermata(note):
             print 'fermata'
-        durations.append(get_duration(note))
+        if is_grace(note):
+            durations.append('0')
+            #print 'grace note'
+        else:
+            durations.append(get_duration(note))
         if is_rest(note):
             notes.append('0')
         else: 
@@ -138,7 +147,7 @@ def load_gt(gt_file, t, fs = 44100, frame=1024, hop=1024):
             vad_gt[j]=aux_vad_gt[i-1]
             j=j+1
     
-    cr = csv.reader(open("../traditional_dataset/note_convertion.csv","rb"))
+    cr = csv.reader(open("./traditional_dataset/note_convertion.csv","rb"))
           
     notation=[]
     frequency=[]
@@ -178,6 +187,7 @@ def load_gt(gt_file, t, fs = 44100, frame=1024, hop=1024):
 def load_audio(audio_file):
     
     fs, audio = wav.read(audio_file)
+    audio = audio.astype('float32')
 #    audio = audio.astype('float64')
     t = np.arange(len(audio)) * float(1)/fs
     
@@ -194,16 +204,15 @@ if __name__=="__main__":
 
     ltrdataset = load_list()    
 
-    fragment = ltrdataset[11]    
+    fragment = ltrdataset[9]    
 
     audio_file = fragment + '_mono.wav'
     gt_file = fragment + '.csv'
-#    score_file = fragment + '.xml'
+    score_file = fragment + '.xml'
 
     audio, t, fs = load_audio(audio_file)
-    vad_gt, gt, onset_gt, melodiii = load_gt(gt_file, t)       
-    
-#    score, notes = load_score(score_file)
+    activity_gt, notes_gt, onset_gt, melodiii = load_gt(gt_file, t)       
+    score, notes = load_score(score_file)
 
 #    dom = parse("just_gettin'_it.xml")
 #
